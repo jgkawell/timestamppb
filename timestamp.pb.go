@@ -73,6 +73,7 @@
 package timestamppb
 
 import (
+	"database/sql/driver"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -222,6 +223,30 @@ func (x *Timestamp) CheckValid() error {
 		return protoimpl.X.NewError("timestamp (%v) has out-of-range nanos", x)
 	default:
 		return nil
+	}
+}
+
+// Value implements the driver.Valuer interface within the database/sql package. This enables the Timestamp type to be
+// used the same as the time.Time type within the database/sql package. This is useful for usage with ORMs like Bun.
+func (x *Timestamp) Value() (driver.Value, error) {
+	if x == nil {
+		return nil, nil
+	}
+	return x.AsTime(), x.CheckValid()
+}
+
+// Scan implements the Scanner interface within the database/sql package. This enables the Timestamp type to be used
+// the same as the time.Time type within the database/sql package. This is useful for usage with ORMs like Bun.
+func (x *Timestamp) Scan(src interface{}) error {
+	switch src := src.(type) {
+	case time.Time:
+		*x = *New(src)
+		return nil
+	case nil:
+		*x = Timestamp{}
+		return nil
+	default:
+		return protoimpl.X.NewError("unsupported data type: %T", src)
 	}
 }
 

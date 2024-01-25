@@ -70,7 +70,7 @@
 //
 //	ts := timestamppb.Now()
 //	... // make use of ts as a *timestamppb.Timestamp
-package timestamppb
+package timestamp
 
 import (
 	"database/sql/driver"

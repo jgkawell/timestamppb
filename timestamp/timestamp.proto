@@ -30,9 +30,9 @@
 
 syntax = "proto3";
 
-package timestamppb;
+package timestamp;
 
-option go_package = "github.com/jgkawell/timestamppb";
+option go_package = "github.com/jgkawell/timestamppb/timestamp";
 
 // A Timestamp represents a point in time independent of any time zone or local
 // calendar, encoded as a count of seconds and fractions of seconds at
